@@ -37,6 +37,8 @@ use ::{
   Allocator,
   Hook,
   Index,
+  Context,
+  Continuation,
 };
 
 /// Arithmetic operations for `lua_arith`.
@@ -960,11 +962,21 @@ impl State {
     panic!("co_yieldk called in non-coroutine context; check is_yieldable first")
   }
 
+  /// Maps to `lua_yieldk` without closure magic
+  pub fn co_yieldk_raw(&mut self, nresults: c_int, ctx: Context, k: Continuation) -> c_int {
+    unsafe { ffi::lua_yieldk(self.L, nresults, ctx, k) }
+  }
+
   /// Maps to `lua_yield`. This function is not called `yield` because it is a
   /// reserved keyword.
   pub fn co_yield(&mut self, nresults: c_int) -> ! {
     unsafe { ffi::lua_yield(self.L, nresults) };
     panic!("co_yield called in non-coroutine context; check is_yieldable first")
+  }
+
+  /// Maps to `lua_yield` without closure magic
+  pub fn co_yield_raw(&mut self, nresults: c_int) -> c_int {
+      unsafe { ffi::lua_yield(self.L, nresults) }
   }
 
   /// Maps to `lua_resume`.

@@ -61,6 +61,8 @@ pub use ffi::lua_Integer as Integer;
 pub use ffi::lua_CFunction as Function;
 pub use ffi::lua_Alloc as Allocator;
 pub use ffi::lua_Hook as Hook;
+pub use ffi::lua_KContext as Context;
+pub use ffi::lua_KFunction as Continuation;
 
 /// Integer type used to index the Lua stack, usually `i32`.
 pub type Index = libc::c_int;
